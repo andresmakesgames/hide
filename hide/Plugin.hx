@@ -50,7 +50,7 @@ class Plugin {
 		"Type",
 		"ValueType",
 		"Xml",
-		"_Xml",		
+		"_Xml",
 	];
 
 	static function getLibraryPath( libName ) {
@@ -93,7 +93,7 @@ class Plugin {
 				C.addClassPath(hidePath+"/"+value);
 			default:
 			}
-		}		
+		}
 		for( e in EXCLUDES )
 			C.exclude(e);
 	}

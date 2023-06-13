@@ -95,10 +95,10 @@ class Particle2D extends Object2D {
 
 	@:s var paramsParticleGroup : Dynamic;
 
-	override function updateInstance( ctx: Context, ?propName : String ) {
-		super.updateInstance(ctx, propName);
+	override function updateInstance(?propName : String ) {
+		super.updateInstance(propName);
 
-		var particles2d = (cast ctx.local2d : Particles);
+		var particles2d = (cast local2d : Particles);
 
 		particles2d.visible = visible;
 
@@ -115,11 +115,8 @@ class Particle2D extends Object2D {
 		}
 	}
 
-	override function makeInstance(ctx:Context):Context {
-		ctx = ctx.clone(this);
-		var particle2d = new Particles(ctx.local2d);
-		ctx.local2d = particle2d;
-		ctx.local2d.name = name;
+	override function makeObject(parent2d:h2d.Object):h2d.Object {
+		var particle2d = new Particles(local2d);
 
 		var group = new ParticleGroup(particle2d);
 		particle2d.addGroup(group);
@@ -129,8 +126,7 @@ class Particle2D extends Object2D {
 			paramsParticleGroup = group.save();
 		group.rebuildOnChange = false;
 
-		updateInstance(ctx);
-		return ctx;
+		return particle2d;
 	}
 
 	#if editor
@@ -143,8 +139,7 @@ class Particle2D extends Object2D {
 		{ name: "gravity", t: PFloat(), disp: "Gravity", def : 1.0, animate: true, groupName : "Emit Params" }
 	];
 
-	override function makeInteractive(ctx:Context):h2d.Interactive {
-		var local2d = ctx.local2d;
+	override function makeInteractive():h2d.Interactive {
 		if(local2d == null)
 			return null;
 		var particles2d = cast(local2d, h2d.Particles);
@@ -155,31 +150,28 @@ class Particle2D extends Object2D {
 		return int;
 	}
 
-	override function edit( ctx : EditContext ) {
+	override function edit( ctx : hide.prefab.EditContext ) {
 		super.edit(ctx);
 
 		var params = new hide.Element(hide.view.Particles2D.getParamsHTMLform());
 
-		var context = ctx.getContext(this);
-		if( context != null ) {
-			var particles2d = (cast context.local2d : Particles);
-			var group = @:privateAccess particles2d.groups[0];
-			ctx.properties.add(params, group, function (pname) {
-				// if fx2d is running, tick() changes group params and modifies group.save()
-				// if a param has a curve and we changed this param on the right panel,
-				// the saved value will be the value of the curve at this point.
-				Reflect.setField(paramsParticleGroup, pname, Reflect.field(group.save(), pname));
-				ctx.onChange(this, pname);
-			});
-		}
+		var particles2d = (cast local2d : Particles);
+		var group = @:privateAccess particles2d.groups[0];
+		ctx.properties.add(params, group, function (pname) {
+			// if fx2d is running, tick() changes group params and modifies group.save()
+			// if a param has a curve and we changed this param on the right panel,
+			// the saved value will be the value of the curve at this point.
+			Reflect.setField(paramsParticleGroup, pname, Reflect.field(group.save(), pname));
+			ctx.onChange(this, pname);
+		});
 	}
 
-	override function getHideProps() : HideProps {
+	override function getHideProps() : hide.prefab.HideProps {
 		return { icon : "square", name : "Particle2D" };
 	}
 
 	#end
 
-	static var _ = Library.register("particle2D", Particle2D);
+	static var _ = Prefab.register("particle2D", Particle2D);
 
 }

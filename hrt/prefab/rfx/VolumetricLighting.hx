@@ -6,7 +6,7 @@ class VolumetricLightingShader extends hrt.shader.PbrShader {
 		@param var bottom : Float;
 		@param var top : Float;
 		@param var fallOff : Float;
-		
+
 		@param var shadowMap : Sampler2D;
 		@param var shadowProj : Mat3x4;
 		@param var shadowBias : Float;
@@ -98,6 +98,7 @@ class VolumetricLightingShader extends hrt.shader.PbrShader {
 	};
 }
 
+@:access(h3d.scene.Renderer)
 class VolumetricLighting extends RendererFX {
 
 	var pass = new h3d.pass.ScreenFx(new VolumetricLightingShader());
@@ -126,10 +127,9 @@ class VolumetricLighting extends RendererFX {
 	@:s public var maxDist : Float = 30.0;
 	@:s public var decayPower : Float = 1.0;
 
-	override function makeInstance( ctx : hrt.prefab.Context ) : hrt.prefab.Context {
-		ctx = super.makeInstance(ctx);
-		updateInstance(ctx);
-		return ctx;
+	override function makeInstance() {
+		 super.makeInstance();
+		updateInstance();
 	}
 
 	override function begin(r:h3d.scene.Renderer, step:h3d.impl.RendererFX.Step) {
@@ -154,7 +154,7 @@ class VolumetricLighting extends RendererFX {
 
 			pass.shader.maxDist = maxDist;
 			pass.shader.decayPower = decayPower;
-			
+
 			pass.shader.gamma = gamma;
 			pass.shader.bottom = bottom;
 			pass.shader.top = top;
@@ -175,7 +175,7 @@ class VolumetricLighting extends RendererFX {
 			var alignedFactor = (1.0 - dot) / (1.0 - cosAngle);
 			alignedFactor = hxd.Math.clamp(alignedFactor);
 			var realBlur = hxd.Math.lerp(fadeBlur, blur, alignedFactor);
-			alignedFactor = hxd.Math.lerp(minIntensity, 1.0, alignedFactor); 
+			alignedFactor = hxd.Math.lerp(minIntensity, 1.0, alignedFactor);
 			pass.shader.brightOpacity = brightOpacity * alignedFactor;
 			pass.shader.darkOpacity = darkOpacity * alignedFactor;
 
@@ -232,6 +232,7 @@ class VolumetricLighting extends RendererFX {
 				</dl>
 			</div>
 			<div class="group" name="Color">
+				<dt>Angle threshold</dt><dd><input type="range" min="0" max="180" field="angleThreshold"/></dd>
 				<dt>Dark opacity</dt><dd><input type="range" min="0" max="1" field="darkOpacity"/></dd>
 				<dt>Bright opacity</dt><dd><input type="range" min="0" max="1" field="brightOpacity"/></dd>
 				<dt>Dark color</dt><dd><input type="color" field="darkColor"/></dd>
@@ -250,6 +251,6 @@ class VolumetricLighting extends RendererFX {
 
 	#end
 
-	static var _ = hrt.prefab.Library.register("rfx.volumetricLighting", VolumetricLighting);
+	static var _ = Prefab.register("rfx.volumetricLighting", VolumetricLighting);
 
 }

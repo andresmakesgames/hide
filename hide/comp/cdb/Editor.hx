@@ -1125,7 +1125,7 @@ class Editor extends Component {
 								continue;
 							}
 							var ext = f.split(".").pop();
-							if( @:privateAccess hrt.prefab.Library.registeredExtensions.exists(ext) ) {
+							if( @:privateAccess hrt.prefab.Prefab.extensionRegistry.exists(ext) ) {
 								prefabFileCache.push({path: fpath, data: sys.io.File.getContent(fpath)});
 							}
 						}
