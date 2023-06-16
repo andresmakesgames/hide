@@ -79,9 +79,16 @@ class Reference extends Object3D {
 			#if editor
 			p.setEditor((cast shared:hide.prefab.ContextShared).editor);
 			#end
-			refInstance = p.make(null, findFirstLocal2d(), parent3d, sh);
+			if (p.to(Object3D) != null) {
+				refInstance = p.make(null, findFirstLocal2d(), parent3d, sh);
+				return Object3D.getLocal3d(refInstance);
+			} else {
+				var local3d = new h3d.scene.Object(parent3d);
+				refInstance = p.make(null, findFirstLocal2d(), local3d, sh);
+				return local3d;
+			}
 		}
-		return Object3D.getLocal3d(refInstance);
+		return null;
 	}
 
 	override public function findAll<T>( f : Prefab -> Null<T>, followRefs : Bool = false, ?arr : Array<T> ) : Array<T> {
