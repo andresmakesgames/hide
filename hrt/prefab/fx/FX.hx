@@ -46,7 +46,6 @@ class FXAnimation extends h3d.scene.Object {
 	}
 
 	function init(def: FX, ?root: PrefabElement) {
-		trace("Init FX");
 		if(root == null)
 			root = def;
 		initObjAnimations(root);
