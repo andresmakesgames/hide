@@ -128,9 +128,10 @@ class Prefab {
 			throw "Can't instanciate a template prefab unless params.forceInstanciate is true.";
 
 
-
-		shared.root2d = shared.current2d = local2d;
-		shared.root3d = shared.current3d = local3d;
+		if (local2d != null)
+			shared.root2d = shared.current2d = local2d;
+		if (local3d != null)
+			shared.root3d = shared.current3d = local3d;
 
 		shared.isPrototype = false;
 
