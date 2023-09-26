@@ -77,6 +77,7 @@ class Reference extends Object3D {
 			var sh = Prefab.createContextShared();
 			sh.currentPath = source;
 			sh.parent = this;
+			sh.customMake = this.shared.customMake;
 			#if editor
 			p.setEditor((cast shared:hide.prefab.ContextShared).editor);
 			#end
