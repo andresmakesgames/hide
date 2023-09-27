@@ -1172,7 +1172,7 @@ class SceneEditor {
 		else {
 			var path = view.config.getLocal("scene.renderProps");
 			if (path != null) {
-				var refPrefab : hrt.prefab.Reference = cast hrt.prefab.Prefab.createFromPath(path);
+				var refPrefab : hrt.prefab.Reference = cast hrt.prefab.Prefab.loadPath(path);
 				refPrefab.setEditor(this);
 				refPrefab.make(null, root2d, root3d);
     			var lights = refPrefab.getAll(hrt.prefab.Light, true);

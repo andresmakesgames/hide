@@ -1015,7 +1015,7 @@ class Ide {
 			var path = getPath(file);
 			if( checkExists && !sys.FileSystem.exists(path) )
 				return null;
-			return hrt.prefab.Prefab.createFromPath(path).get(cl);
+			return hrt.prefab.Prefab.loadPath(path).get(cl);
 		} catch( e : Dynamic ) {
 			error("Invalid prefab "+file+" ("+e+")");
 			throw e;
